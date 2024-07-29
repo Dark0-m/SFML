@@ -47,7 +47,7 @@ int main() {
     dp.setFont(font);
     dp.setFillColor(sf::Color::White);
 
-    sf::Vector2f targetDirection(1.0f, 0.0f); // Assume the correct entry direction is to the right
+    sf::Vector2f targetDirection(1.0f, 0.0f);
 
     while (window.isOpen()) {
         while (window.pollEvent(event)) {
