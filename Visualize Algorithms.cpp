@@ -3,6 +3,9 @@
 #include <vector>
 #include <cmath>
 
+#define MAX 200
+#define MIN 100
+
 void bubbleSort(int& i, int& j, std::vector<sf::RectangleShape>& rectangles, bool& sorting, bool& sorted) {
     if (i >= rectangles.size() - 1) {
         sorted = true;
@@ -24,23 +27,21 @@ void bubbleSort(int& i, int& j, std::vector<sf::RectangleShape>& rectangles, boo
         i++;
     }
 
-    sf::sleep(sf::milliseconds(50));
 }
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Visualize Algorithms");
 
-    // Vector containing the heights for the rectangles
     std::vector<int> nums;
     bool sorting = false;
     int i = 0, j = 0;
 
     srand(time(0));
 
-    int limit = rand() % 15;
+    int limit = rand() % MAX;
 
-    while (limit < 5) {
-        limit = rand() % 15;
+    while (limit < MIN) {
+        limit = rand() % MAX;
     }
 
     for (int i = 0; i < limit; i++) {
@@ -48,13 +49,14 @@ int main() {
     }
 
     int screenWidth = window.getSize().x;
-    int screenHeight = window.getSize().y - 10;
+    int screenHeight = window.getSize().y - 5;
 
-    int width = screenWidth / nums.size();
+    float width = screenWidth / nums.size();
 
     int maxNum = *std::max_element(nums.begin(), nums.end());
 
     float heightScale = static_cast<float>(screenHeight) / maxNum;
+    std::cout << maxNum << "\n";
 
     sf::RectangleShape rectRef;
     rectRef.setFillColor(sf::Color::White);
@@ -63,7 +65,7 @@ int main() {
 
     for (int i = 0; i < nums.size(); i++) {
         float rectHeight = heightScale * nums[i];
-        rectRef.setSize(sf::Vector2f(width - 5, -rectHeight));
+        rectRef.setSize(sf::Vector2f(width - 1, -rectHeight));
         rectRef.setPosition(i * width, screenHeight);
         rectangles.push_back(sf::RectangleShape(rectRef));
     }
