@@ -1,0 +1,61 @@
+void Collision(player& player, std::vector<sf::Sprite>& walls, sf::Vector2f &velocity) {
+	for (int i = 0; i < walls.size(); i++)
+	{
+		sf::FloatRect nextPos;
+		sf::FloatRect playerBounds = player.sprite.getGlobalBounds();
+		sf::FloatRect wallBounds = walls[i].getGlobalBounds();
+
+		nextPos = playerBounds;
+
+		nextPos.left += velocity.x;
+		nextPos.top += velocity.y;
+
+		if (wallBounds.intersects(nextPos)) {
+
+
+			//Bottom Collision
+			if (playerBounds.top < wallBounds.top
+				&& playerBounds.top + playerBounds.height < wallBounds.top + wallBounds.height
+				&& playerBounds.left < wallBounds.left + wallBounds.width
+				&& playerBounds.left + playerBounds.width > wallBounds.left)
+			{
+				velocity.y = 0.0f;
+				player.sprite.setPosition(playerBounds.left, wallBounds.top - playerBounds.height);
+			}
+
+			//Top Collision
+			if (playerBounds.top > wallBounds.top
+				&& playerBounds.top + playerBounds.height > wallBounds.top + wallBounds.height
+				&& playerBounds.left < wallBounds.left + wallBounds.width
+				&& playerBounds.left + playerBounds.width > wallBounds.left)
+			{
+				velocity.y = 0.0f;
+				player.sprite.setPosition(playerBounds.left, wallBounds.top + wallBounds.height);
+			}
+
+			//Left Collision
+			if (playerBounds.left < wallBounds.left
+				&& playerBounds.left + playerBounds.width < wallBounds.left + wallBounds.width
+				&& playerBounds.top < wallBounds.top + wallBounds.height
+				&& playerBounds.top + playerBounds.height > wallBounds.top)
+			{
+				velocity.x = 0.0f;
+				player.sprite.setPosition(wallBounds.left - playerBounds.width, playerBounds.top);
+			}
+
+			//Right Collision
+			if (playerBounds.left > wallBounds.left
+				&& playerBounds.left + playerBounds.width > wallBounds.left + wallBounds.width
+				&& playerBounds.top < wallBounds.top + wallBounds.height
+				&& playerBounds.top + playerBounds.height > wallBounds.top)
+			{
+				velocity.x = 0.0f;
+				player.sprite.setPosition(wallBounds.left + wallBounds.width, playerBounds.top);
+			}
+
+		}
+
+		sf::FloatRect nextPosBottom;
+		nextPosBottom.top = nextPos.top + nextPos.height;
+	}
+}
