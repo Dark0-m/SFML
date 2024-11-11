@@ -1,12 +1,12 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
-#include <vector>
-#include <cmath>
+#include <vector>e
 
-#define MAX 200
-#define MIN 100
+#define MAX 450
+#define MIN 300
 
-void bubbleSort(int& i, int& j, std::vector<sf::RectangleShape>& rectangles, bool& sorting, bool& sorted) {
+void bubbleSort(int& i, int& j, std::vector<sf::RectangleShape>& rectangles, bool& sorting, bool& sorted, sf::Sound& sortingSound) {
     if (i >= rectangles.size() - 1) {
         sorted = true;
         return;
@@ -14,6 +14,7 @@ void bubbleSort(int& i, int& j, std::vector<sf::RectangleShape>& rectangles, boo
 
     if (std::abs(rectangles[j].getSize().y) > std::abs(rectangles[j + 1].getSize().y)) {
         std::swap(rectangles[j], rectangles[j + 1]);
+        sortingSound.play();
 
         sf::Vector2f tempPos = rectangles[j].getPosition();
         rectangles[j].setPosition(rectangles[j + 1].getPosition());
@@ -30,7 +31,21 @@ void bubbleSort(int& i, int& j, std::vector<sf::RectangleShape>& rectangles, boo
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Visualize Algorithms");
+    sf::RenderWindow window(sf::VideoMode(1250, 1250), "Visualize Algorithms");
+
+    sf::SoundBuffer sortingBuffer;
+    sortingBuffer.loadFromFile("Music\\sorting.wav");
+
+    sf::SoundBuffer finshBuffer;
+    finshBuffer.loadFromFile("Music\\owin31.wav");
+
+    sf::Sound sortingSound;
+    sortingSound.setBuffer(sortingBuffer);
+
+    sf::Sound finshSound;
+    finshSound.setBuffer(finshBuffer);
+
+    bool playerFinshSound = false;
 
     std::vector<int> nums;
     bool sorting = false;
@@ -63,6 +78,7 @@ int main() {
 
     std::vector<sf::RectangleShape> rectangles;
 
+    //Adding rectangles
     for (int i = 0; i < nums.size(); i++) {
         float rectHeight = heightScale * nums[i];
         rectRef.setSize(sf::Vector2f(width - 1, -rectHeight));
@@ -88,11 +104,16 @@ int main() {
         }
 
         if (sorting) {
-            bubbleSort(i, j, rectangles, sorting, sorted);
+            bubbleSort(i, j, rectangles, sorting, sorted, sortingSound);
             clock.restart();
         }
 
         if (sorted) {
+            if (!playerFinshSound) {
+                sf::sleep(sf::milliseconds(500));
+                finshSound.play();
+                playerFinshSound = true;
+            }
             for (auto& rect : rectangles) {
                 rect.setFillColor(sf::Color::Green);
             }
