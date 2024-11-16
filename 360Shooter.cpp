@@ -74,11 +74,14 @@ int main() {
 
 
         for (auto& bullet : bullets) {
-            if (bullet.shape.getPosition().x <= 0 || bullet.shape.getPosition().x >= WINDOW_WIDTH) {
+            if (bullet.shape.getPosition().x - bullet.shape.getRadius() <= 0 || bullet.shape.getPosition().x + bullet.shape.getRadius() >= WINDOW_WIDTH) {
                 bullet.velocity.x = 0;
             }
-            if (bullet.shape.getPosition().y >= WINDOW_HEIGHT || bullet.shape.getPosition().y <= 0) {
+            if (bullet.shape.getPosition().y + bullet.shape.getRadius() >= WINDOW_HEIGHT || bullet.shape.getPosition().y - bullet.shape.getRadius() <= 0) {
                 bullet.velocity.y = 0;
+            }
+            if (bullet.shape.getPosition().y + bullet.shape.getRadius() - 9.8 < WINDOW_HEIGHT) {
+                bullet.velocity.y += 4 * dt;
             }
             bullet.shape.move(bullet.velocity);
         }
